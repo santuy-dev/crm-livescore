@@ -1,11 +1,22 @@
 "use client";
 
+import type { Dispatch, SetStateAction } from "react";
+
+type PageKey =
+  | "dashboard"
+  | "web"
+  | "group"
+  | "bonus"
+  | "input"
+  | "crm"
+  | "users";
+
 type Props = {
-  current: string;
-  setPage: (page: string) => void;
+  current: PageKey;
+  setPage: Dispatch<SetStateAction<PageKey>>;
   role: "SUPERADMIN" | "ADMIN" | "VIEWER";
   sidebarOpen: boolean;
-  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Sidebar({
@@ -23,7 +34,7 @@ export default function Sidebar({
     { key: "input", label: "Input Harian", roles: ["SUPERADMIN", "ADMIN"] },
     { key: "crm", label: "CRM Management", roles: ["SUPERADMIN"] },
     { key: "users", label: "User Management", roles: ["SUPERADMIN"] },
-  ];
+  ] as const;
 
   const visibleMenus = menus.filter((m) => m.roles.includes(role));
 
