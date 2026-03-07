@@ -1,7 +1,5 @@
 "use client";
 
-import type { Dispatch, SetStateAction } from "react";
-
 type PageKey =
   | "dashboard"
   | "web"
@@ -11,12 +9,14 @@ type PageKey =
   | "crm"
   | "users";
 
+type Role = "SUPERADMIN" | "ADMIN" | "VIEWER";
+
 type Props = {
   current: PageKey;
-  setPage: Dispatch<SetStateAction<PageKey>>;
-  role: "SUPERADMIN" | "ADMIN" | "VIEWER";
+  setPage: (page: PageKey) => void;
+  role: Role;
   sidebarOpen: boolean;
-  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+  setSidebarOpen: (open: boolean) => void;
 };
 
 export default function Sidebar({
@@ -26,7 +26,7 @@ export default function Sidebar({
   sidebarOpen,
   setSidebarOpen,
 }: Props) {
-  const menus = [
+  const menus: { key: PageKey; label: string; roles: Role[] }[] = [
     { key: "dashboard", label: "Dashboard", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "web", label: "Omset per Web", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "group", label: "Omset per Group", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
@@ -34,7 +34,7 @@ export default function Sidebar({
     { key: "input", label: "Input Harian", roles: ["SUPERADMIN", "ADMIN"] },
     { key: "crm", label: "CRM Management", roles: ["SUPERADMIN"] },
     { key: "users", label: "User Management", roles: ["SUPERADMIN"] },
-  ] as const;
+  ];
 
   const visibleMenus = menus.filter((m) => m.roles.includes(role));
 

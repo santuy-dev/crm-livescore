@@ -668,12 +668,12 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900">
       <div className="flex">
-        <Sidebar
+       <Sidebar
   current={page}
-  setPage={setPage}
+  setPage={(nextPage) => setPage(nextPage)}
   role={sessionRole}
   sidebarOpen={sidebarOpen}
-  setSidebarOpen={setSidebarOpen}
+  setSidebarOpen={(open) => setSidebarOpen(open)}
 />
 
         <main className="min-h-screen flex-1 p-6 md:p-8">
