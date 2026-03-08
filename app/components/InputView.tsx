@@ -7,9 +7,9 @@ type Props = {
   setInputForm: React.Dispatch<React.SetStateAction<InputFormState>>;
   selectedCrm?: RowComputed;
   selectedCrmInputs: InputRow[];
-  onSave: () => void;
+  onSave: () => void | Promise<void>;
   onEdit: (row: InputRow) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => void | Promise<void>;
 };
 
 export default function InputView({
@@ -114,15 +114,14 @@ export default function InputView({
               />
             </div>
 
-            <button
-              onClick={() => {
-                alert("tombol save diklik");
-                onSave();
+             <button
+               onClick={() => {
+                 void onSave();
               }}
-              className="rounded-2xl bg-slate-900 px-4 py-3 text-white"
-              >
-                Simpan Input TEST
-              </button>
+  className="rounded-2xl bg-slate-900 px-4 py-3 text-white"
+>
+  Simpan Input
+</button>
           </div>
         </div>
 

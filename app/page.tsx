@@ -6,7 +6,7 @@ import Sidebar from "./sidebar";
 
 import { supabase } from "./lib/supabase";
 import DashboardView from "./components/DashboardView";
-import DateRangeFilter from "./components/DateRangeFilter";
+import DateRangeFilter from "./DateRangeFilter";
 import DailyChartView from "./components/DailyChartView";
 import InputView from "./components/InputView";
 import WebView from "./components/WebView";
