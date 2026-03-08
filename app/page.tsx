@@ -268,9 +268,33 @@ async function handleDeleteInput(id: string) {
 }
 
 return (
-  <div className="min-h-screen bg-slate-100">
-    {/* seluruh UI kamu */}
+  <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div className="flex">
+
+      <Sidebar
+        current={page}
+        setPage={(nextPage) => setPage(nextPage)}
+        role={sessionRole}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={(open) => setSidebarOpen(open)}
+      />
+
+      <main className="min-h-screen flex-1 p-6 md:p-8">
+
+        {!sidebarOpen && (
+          <div className="mb-4">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm"
+            >
+              ☰ Menu
+            </button>
+          </div>
+        )}
+
+        {/* seluruh dashboard UI kamu */}
+
+      </main>
+    </div>
   </div>
 );
-
-}
