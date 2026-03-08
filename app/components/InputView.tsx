@@ -115,11 +115,14 @@ export default function InputView({
             </div>
 
             <button
-              onClick={onSave}
-              className="w-full rounded-2xl bg-slate-900 px-5 py-3 font-medium text-white"
-            >
-              Simpan Input
-            </button>
+  onClick={() => {
+    alert("tombol save diklik");
+    onSave();
+  }}
+  className="rounded-2xl bg-slate-900 px-4 py-3 text-white"
+>
+  Simpan Input
+</button>
           </div>
         </div>
 
