@@ -18,24 +18,20 @@ import UsersView from "./components/UsersView";
 import {
   INITIAL_USERS,
   type Crm,
-  type InputFormState,
   type InputRow,
-  type Role,
+  type InputFormState,
   type RowComputed,
+  type Role,
   type User,
 } from "./data";
 
 import {
   clamp01,
-  exportCsv,
-  getBonusPercent,
-  getBonusTierLabel,
   getStatus,
   loadLocal,
-  makeId,
-  monthKey,
-  safeNumber,
   saveLocal,
+  safeNumber,
+  monthKey,
 } from "./utils";
 
 type PageKey =
@@ -57,83 +53,82 @@ export default function Page() {
 
 const [sidebarOpen, setSidebarOpen] = useState(true);
 const [page, setPage] = useState<PageKey>("dashboard");
-const [sessionRole, setSessionRole] = useState<Role>("SUPERADMIN");
 
 const [crms, setCrms] = useState<Crm[]>([]);
 const [inputs, setInputs] = useState<InputRow[]>([]);
+
 const [users, setUsers] = useState<User[]>(INITIAL_USERS);
 
-const [isHydrated, setIsHydrated] = useState(false);
-const [selectedPeriod, setSelectedPeriod] = useState(monthKey(new Date()));
-
 const [sessionUser, setSessionUser] = useState<SessionUser | null>(null);
+const [sessionRole, setSessionRole] = useState<Role>("SUPERADMIN");
 
-const [loginForm, setLoginForm] = useState({
-  username: "superadmin",
-  password: "123456",
-});
-
-const [searchTerm, setSearchTerm] = useState("");
-const [selectedGroupFilter, setSelectedGroupFilter] = useState("ALL");
-const [selectedWebFilter, setSelectedWebFilter] = useState("ALL");
+const [isHydrated, setIsHydrated] = useState(false);
 
 const [inputForm, setInputForm] = useState<InputFormState>({
-  date: new Date().toISOString().slice(0, 10),
+  date: new Date().toISOString().slice(0,10),
   crmId: "",
   fdp: "",
-  value: "",
+  value: ""
 });
 
 const [dateRange, setDateRange] = useState({
   startDate: new Date(),
-  endDate: new Date(),
+  endDate: new Date()
 });
 
-async function fetchCrms() {
+async function fetchCrms(){
+
   const { data, error } = await supabase
     .from("crms")
     .select("*");
 
-  if (error) {
-    console.error("Error ambil CRM:", error);
+  if(error){
+    console.error("CRM error:", error);
     return;
   }
 
-  if (data) {
+  if(data){
     setCrms(data);
   }
+
 }
 
-async function fetchInputs() {
+async function fetchInputs(){
+
   const { data, error } = await supabase
     .from("inputs")
     .select("*");
 
-  if (error) {
-    console.error("Error ambil inputs:", error);
+  if(error){
+    console.error("INPUT error:", error);
     return;
   }
 
-  if (data) {
-    const mapped = data.map((row: any) => ({
+  if(data){
+
+    const mapped = data.map((row:any)=>({
+
       id: row.id,
       date: row.date,
       crmId: row.crm_id,
       fdp: row.fdp ?? 0,
-      value: row.value ?? 0,
+      value: row.value ?? 0
+
     }));
 
     setInputs(mapped);
   }
+
 }
 
-useEffect(() => {
+useEffect(()=>{
+
   const loadedUsers = loadLocal("crm_users", INITIAL_USERS);
   const loadedSession = loadLocal<SessionUser | null>("crm_session", null);
 
   setUsers(loadedUsers);
 
-  if (loadedSession) {
+  if(loadedSession){
     setSessionUser(loadedSession);
     setSessionRole(loadedSession.role);
   }
@@ -142,97 +137,36 @@ useEffect(() => {
 
   fetchCrms();
   fetchInputs();
-}, []);
 
-useEffect(() => {
-  if (!isHydrated) return;
-  saveLocal("crm_users", users);
-}, [users, isHydrated]);
+},[]);
 
-useEffect(() => {
-  if (!isHydrated) return;
-  saveLocal("crm_session", sessionUser);
-}, [sessionUser, isHydrated]);
+async function saveInput(){
 
-const periodInputs = useMemo(() => {
-  return inputs.filter((x) => {
-    const itemDate = new Date(x.date);
-    const start = new Date(dateRange.startDate);
-    const end = new Date(dateRange.endDate);
-
-    start.setHours(0,0,0,0);
-    end.setHours(23,59,59,999);
-
-    return itemDate >= start && itemDate <= end;
-  });
-}, [inputs, dateRange]);
-
-const rows: RowComputed[] = useMemo(() => {
-  return crms
-    .filter((crm) => crm.active)
-    .map((crm) => {
-
-      const crmInputs = periodInputs.filter(
-        (x) => x.crmId === crm.id
-      );
-
-      const totalFdp = crmInputs.reduce(
-        (sum, row) => sum + row.fdp, 0
-      );
-
-      const totalValue = crmInputs.reduce(
-        (sum, row) => sum + row.value, 0
-      );
-
-      const pFdp = crm.targetFdp > 0 ? totalFdp / crm.targetFdp : 0;
-      const pValue = crm.targetValue > 0 ? totalValue / crm.targetValue : 0;
-
-      const score = (clamp01(pFdp) + clamp01(pValue)) / 2;
-
-      return {
-        ...crm,
-        totalFdp,
-        totalValue,
-        pFdp,
-        pValue,
-        score,
-        status: getStatus(score),
-      };
-
-    })
-    .sort((a,b) => b.score - a.score);
-
-}, [crms, periodInputs]);
-
-async function saveInput() {
-
-  if (!inputForm.crmId) {
-    alert("CRM harus dipilih.");
+  if(!inputForm.crmId){
+    alert("CRM harus dipilih");
     return;
   }
 
   const cleanFdp = safeNumber(inputForm.fdp);
   const cleanValue = safeNumber(inputForm.value);
 
-  if (cleanFdp <= 0 && cleanValue <= 0) {
-    alert("Minimal isi FDP atau Value.");
+  if(cleanFdp <=0 && cleanValue <=0){
+    alert("Isi FDP atau Value");
     return;
   }
 
   const { error } = await supabase
     .from("inputs")
-    .insert([
-      {
-        date: inputForm.date,
-        crm_id: inputForm.crmId,
-        fdp: cleanFdp,
-        value: cleanValue,
-      },
-    ]);
+    .insert([{
+      date: inputForm.date,
+      crm_id: inputForm.crmId,
+      fdp: cleanFdp,
+      value: cleanValue
+    }]);
 
-  if (error) {
+  if(error){
     console.error(error);
-    alert("Gagal simpan data");
+    alert("Gagal simpan");
     return;
   }
 
@@ -240,61 +174,114 @@ async function saveInput() {
 
   alert("Data berhasil disimpan");
 
-  setInputForm((prev) => ({
+  setInputForm(prev=>({
     ...prev,
-    fdp: "",
-    value: "",
+    fdp:"",
+    value:""
   }));
 
 }
 
-async function handleDeleteInput(id: string) {
+async function handleDeleteInput(id:string){
 
-  const confirmed = window.confirm("Hapus data ini?");
-  if (!confirmed) return;
+  const confirm = window.confirm("Hapus data?");
+  if(!confirm) return;
 
   const { error } = await supabase
     .from("inputs")
     .delete()
     .eq("id", id);
 
-  if (error) {
+  if(error){
     console.error(error);
-    alert("Gagal hapus data");
+    alert("Gagal hapus");
     return;
   }
 
   await fetchInputs();
+
 }
 
+const rows:RowComputed[] = useMemo(()=>{
+
+  return crms.map(crm=>{
+
+    const crmInputs = inputs.filter(
+      x => x.crmId === crm.id
+    );
+
+    const totalFdp = crmInputs.reduce(
+      (sum,row)=> sum + row.fdp , 0
+    );
+
+    const totalValue = crmInputs.reduce(
+      (sum,row)=> sum + row.value , 0
+    );
+
+    const pFdp = crm.targetFdp > 0
+      ? totalFdp / crm.targetFdp
+      : 0;
+
+    const pValue = crm.targetValue > 0
+      ? totalValue / crm.targetValue
+      : 0;
+
+    const score = (clamp01(pFdp) + clamp01(pValue)) / 2;
+
+    return {
+      ...crm,
+      totalFdp,
+      totalValue,
+      pFdp,
+      pValue,
+      score,
+      status: getStatus(score)
+    }
+
+  });
+
+},[crms,inputs]);
+
 return (
-  <div className="min-h-screen bg-slate-100 text-slate-900">
-    <div className="flex">
 
-      <Sidebar
-        current={page}
-        setPage={(nextPage) => setPage(nextPage)}
-        role={sessionRole}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={(open) => setSidebarOpen(open)}
-      />
+<div className="min-h-screen bg-slate-100 text-slate-900">
 
-      <main className="min-h-screen flex-1 p-6 md:p-8">
+<div className="flex">
 
-        {!sidebarOpen && (
-          <div className="mb-4">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm"
-            >
-              ☰ Menu
-            </button>
-          </div>
-        )}
+<Sidebar
+  current={page}
+  setPage={(p)=>setPage(p)}
+  role={sessionRole}
+  sidebarOpen={sidebarOpen}
+  setSidebarOpen={setSidebarOpen}
+/>
 
-        {/* seluruh dashboard UI kamu */}
+<main className="flex-1 p-6">
 
-      </main>
-    </div>
-  </div>
+<DateRangeFilter onApply={setDateRange}/>
+
+{page==="dashboard" && (
+<DashboardView rows={rows}/>
+)}
+
+{page==="input" && (
+<InputView
+  rows={rows}
+  inputForm={inputForm}
+  setInputForm={setInputForm}
+  onSave={saveInput}
+  onDelete={handleDeleteInput}
+/>
+)}
+
+{page==="web" && <WebView rows={rows}/>}
+
+{page==="group" && <GroupView rows={rows}/>}
+
+</main>
+
+</div>
+</div>
+
 );
+}
