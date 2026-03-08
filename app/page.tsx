@@ -421,10 +421,12 @@ async function fetchCrms() {
   }
 
   async function saveInput() {
-    if (!inputForm.crmId) {
-      alert("CRM harus dipilih.");
-      return;
-    }
+  alert("saveInput jalan");   // ← TAMBAHKAN DI SINI
+
+  if (!inputForm.crmId) {
+    alert("CRM harus dipilih.");
+    return;
+  }
 
     const cleanFdp = safeNumber(inputForm.fdp);
     const cleanValue = safeNumber(inputForm.value);
