@@ -420,7 +420,7 @@ async function fetchCrms() {
     });
   }
 
-  function saveInput() {
+  async function saveInput() {
     if (!inputForm.crmId) {
       alert("CRM harus dipilih.");
       return;
@@ -456,6 +456,18 @@ async function fetchCrms() {
         },
       ]);
     }
+
+    const { error } = await supabase.from("inputs").insert({
+  date: inputForm.date,
+  crm_id: inputForm.crmId,
+  fdp: cleanFdp,
+  value: cleanValue
+});
+
+if (error) {
+  console.error("Supabase error:", error);
+  alert("Gagal simpan ke database.");
+}
 
     setSelectedPeriod(monthKey(inputForm.date));
     alert("Data berhasil disimpan.");
