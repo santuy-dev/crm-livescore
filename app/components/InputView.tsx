@@ -121,7 +121,7 @@ export default function InputView({
   }}
   className="rounded-2xl bg-slate-900 px-4 py-3 text-white"
 >
-  Simpan Input
+  Simpan Input TEST
 </button>
           </div>
         </div>
