@@ -243,45 +243,24 @@ const rows:RowComputed[] = useMemo(()=>{
 },[crms,inputs]);
 
 return (
+  <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div className="flex">
 
-<div className="min-h-screen bg-slate-100 text-slate-900">
+      <Sidebar
+        current={page}
+        setPage={(nextPage) => setPage(nextPage)}
+        role={sessionRole}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={(open) => setSidebarOpen(open)}
+      />
 
-<div className="flex">
+      <main className="min-h-screen flex-1 p-6 md:p-8">
 
-<Sidebar
-  current={page}
-  setPage={(p)=>setPage(p)}
-  role={sessionRole}
-  sidebarOpen={sidebarOpen}
-  setSidebarOpen={setSidebarOpen}
-/>
+        {/* dashboard / input / web / group dll */}
 
-<main className="flex-1 p-6">
+      </main>
 
-<DateRangeFilter onApply={setDateRange}/>
-
-{page==="dashboard" && (
-<DashboardView rows={rows}/>
-)}
-
-{page==="input" && (
-<InputView
-  rows={rows}
-  inputForm={inputForm}
-  setInputForm={setInputForm}
-  onSave={saveInput}
-  onDelete={handleDeleteInput}
-/>
-)}
-
-{page==="web" && <WebView rows={rows}/>}
-
-{page==="group" && <GroupView rows={rows}/>}
-
-</main>
-
-</div>
-</div>
-
+    </div>
+  </div>
 );
 }
