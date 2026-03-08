@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import Sidebar from "./sidebar";
 
+import { supabase } from "./lib/supabase";
 import DashboardView from "./components/DashboardView";
 import DateRangeFilter from "./components/DateRangeFilter";
 import DailyChartView from "./components/DailyChartView";
@@ -77,6 +78,21 @@ export default function Page() {
   const [sessionRole, setSessionRole] = useState<Role>("SUPERADMIN");
 
   const [crms, setCrms] = useState<Crm[]>(INITIAL_CRMS);
+async function fetchCrms() {
+  const { data, error } = await supabase
+    .from("crms")
+    .select("*");
+
+  if (error) {
+    console.error("Error ambil CRM:", error);
+    return;
+  }
+
+  if (data) {
+    setCrms(data);
+  }
+}
+
   const [inputs, setInputs] = useState<InputRow[]>(INITIAL_INPUTS);
   const [users, setUsers] = useState<User[]>(INITIAL_USERS);
 
@@ -159,6 +175,10 @@ export default function Page() {
     if (!isHydrated) return;
     saveLocal("crm_session", sessionUser);
   }, [sessionUser, isHydrated]);
+
+  useEffect(() => {
+  fetchCrms();
+}, []);
 
   const periodInputs = useMemo(() => {
   return inputs.filter((x) => {
