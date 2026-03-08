@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import Sidebar from "./sidebar";
 
-import { supabase } from "./lib/supabase";
+import { supabase } from "./supabase";
 import DashboardView from "./components/DashboardView";
 import DateRangeFilter from "./DateRangeFilter";
 import DailyChartView from "./components/DailyChartView";
