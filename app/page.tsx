@@ -267,5 +267,3 @@ async function handleDeleteInput(id: string) {
   await fetchInputs();
 
 }
-
-localStorage.clear()
