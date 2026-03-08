@@ -265,5 +265,12 @@ async function handleDeleteInput(id: string) {
   }
 
   await fetchInputs();
+}
+
+return (
+  <div>
+    ...
+  </div>
+);
 
 }
