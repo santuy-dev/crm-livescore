@@ -994,62 +994,7 @@ function getLeaderValueStatus(progress: number) {
             <GroupView groupRows={groupRows} onExport={exportGroupCsv} />
           )}
 
-          {page === "teamleader" && (
-  <div className="w-full space-y-6">
-    <div>
-      <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-        Rekap Team
-      </div>
-      <h1 className="mt-2 text-3xl font-bold">Team Leader</h1>
-      <p className="mt-2 text-slate-600">
-        Rekap performa berdasarkan pembagian team leader dan anggota CRM.
-      </p>
-    </div>
-
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="overflow-x-auto rounded-2xl">
-        <table className="w-full min-w-[1100px] text-sm">
-          <thead>
-            <tr className="border-b border-slate-200 text-left text-slate-500">
-              <th className="p-3">Rank</th>
-              <th className="p-3">Team Leader</th>
-              <th className="p-3">Jumlah CRM</th>
-              <th className="p-3">Anggota</th>
-              <th className="p-3">Total FDP</th>
-              <th className="p-3">Total Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            {teamLeaderRows.map((row, index) => (
-              <tr key={row.leader} className="border-b border-slate-100 last:border-0">
-                <td className="p-3 font-semibold">{index + 1}</td>
-                <td className="p-3 font-semibold">{row.leader}</td>
-                <td className="p-3">{row.crmCount}</td>
-                <td className="p-3">{row.members.join(", ")}</td>
-                <td className="p-3">{row.totalFdp}</td>
-                <td className="p-3">
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                    maximumFractionDigits: 0,
-                  }).format(row.totalValue)}
-                </td>
-              </tr>
-            ))}
-
-            {teamLeaderRows.length === 0 && (
-              <tr>
-                <td colSpan={6} className="p-6 text-center text-slate-500">
-                  Belum ada data team leader.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-)}
+        {page === "teamleader" && <TeamLeaderView teams={teamLeaderRows} />}
 
           {page === "bonus" && canSeeRestricted && (
             <BonusView
