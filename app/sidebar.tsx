@@ -9,7 +9,7 @@ type PageKey =
   | "input"
   | "crm"
   | "users";
-  
+
 type Role = "SUPERADMIN" | "ADMIN" | "VIEWER";
 
 type Props = {
@@ -43,17 +43,17 @@ export default function Sidebar({
   if (!sidebarOpen) return null;
 
   return (
-    <aside className="sticky top-0 h-screen w-60 shrink-0 border-r border-slate-200 bg-white">
+    <aside className="sticky top-0 h-screen w-48 shrink-0 border-r border-slate-200 bg-white">
       <div className="border-b border-slate-200 p-6">
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
               Internal App
             </div>
-            <h1 className="mt-2 text-2xl font-bold text-slate-900">
+            <h1 className="mt-2 text-xl font-bold text-slate-900">
               CRM Livescore
             </h1>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-xs leading-5 text-slate-500">
               Dashboard operasional CRM, omset, target, bonus, dan input harian.
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function Sidebar({
               <button
                 key={menu.key}
                 onClick={() => setPage(menu.key)}
-                className={`w-full rounded-2xl px-4 py-3 text-left text-sm font-medium transition ${
+                className={`w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium transition ${
                   active
                     ? "bg-slate-900 text-white shadow-sm"
                     : "text-slate-700 hover:bg-slate-100"

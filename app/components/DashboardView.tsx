@@ -22,7 +22,7 @@ function StatCard({
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="text-sm text-slate-500">{title}</div>
-      <div className="mt-3 text-2xl font-bold text-slate-900">{value}</div>
+      <div className="mt-2 text-xl font-bold text-slate-900">{value}</div>
       <div className="mt-2 text-sm text-slate-500">{subtext}</div>
     </div>
   );
@@ -39,7 +39,7 @@ function PodiumCard({
 }) {
   if (!row) {
     return (
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="text-sm text-slate-500">{title}</div>
         <div className="mt-4 text-lg font-semibold text-slate-900">-</div>
         <div className="mt-2 text-sm text-slate-500">Belum ada data</div>
@@ -134,15 +134,15 @@ export default function DashboardView({
   const topFive = rows.slice(0, 5);
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       <div>
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           Livescore Report
         </div>
-        <h1 className="mt-2 text-3xl font-bold">
+        <h1 className="mt-2 text-2xl font-bold">
           CRM Livescore — {selectedPeriodLabel}
         </h1>
-        <p className="mt-2 text-slate-600">
+        <p className="mt-1 text-sm text-slate-600">
           Ringkasan performa CRM, target, ranking, dan progress bulan berjalan.
         </p>
       </div>
@@ -176,8 +176,8 @@ export default function DashboardView({
         <PodiumCard title="Top 3 Performer" row={topThree[2]} rank={3} />
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold">Leaderboard CRM</h2>
@@ -189,22 +189,22 @@ export default function DashboardView({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1200px] text-sm">
+            <table className="w-full min-w-[1100px] text-sm">
               <thead>
                 <tr className="border-b border-slate-200 text-left text-slate-500">
-                  <th className="p-3">Rank</th>
-                  <th className="p-3">CRM</th>
-                  <th className="p-3">Type</th>
-                  <th className="p-3">Group</th>
-                  <th className="p-3">Web</th>
-                  <th className="p-3">FDP</th>
-                  <th className="p-3">Value</th>
-                  <th className="p-3">Target FDP</th>
-                  <th className="p-3">Target Value</th>
-                  <th className="p-3">Progress FDP</th>
-                  <th className="p-3">Progress Value</th>
-                  <th className="p-3">Score</th>
-                  <th className="p-3">Status</th>
+                  <th className="p-3 py-2.5">Rank</th>
+                  <th className="p-3 py-2.5">CRM</th>
+                  <th className="p-3 py-2.5">Type</th>
+                  <th className="p-3 py-2.5">Group</th>
+                  <th className="p-3 py-2.5">Web</th>
+                  <th className="p-3 py-2.5">FDP</th>
+                  <th className="p-3 py-2.5">Value</th>
+                  <th className="p-3 py-2.5">Target FDP</th>
+                  <th className="p-3 py-2.5">Target Value</th>
+                  <th className="p-3 py-2.5">Progress FDP</th>
+                  <th className="p-3 py-2.5">Progress Value</th>
+                  <th className="p-3 py-2.5">Score</th>
+                  <th className="p-3 py-2.5">Status</th>
                 </tr>
               </thead>
 

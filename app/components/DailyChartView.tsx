@@ -45,8 +45,8 @@ export default function DailyChartView({ data }: Props) {
   const bestFdpDay = [...safeData].sort((a, b) => b.fdp - a.fdp)[0];
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="w-full space-y-4">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">

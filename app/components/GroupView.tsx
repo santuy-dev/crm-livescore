@@ -12,13 +12,13 @@ type Props = {
 
 export default function GroupView({ groupRows, onExport }: Props) {
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="mx-auto max-w-7xl space-y-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             Rekap Omset
           </div>
-          <h1 className="mt-2 text-3xl font-bold">Omset per Group</h1>
+          <h1 className="mt-2 text-2xl font-bold">Omset per Group</h1>
         </div>
 
         <button
@@ -29,7 +29,7 @@ export default function GroupView({ groupRows, onExport }: Props) {
         </button>
       </div>
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[900px] text-sm">
             <thead>

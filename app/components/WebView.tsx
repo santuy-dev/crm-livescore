@@ -40,13 +40,13 @@ export default function WebView({
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             Rekap Omset
           </div>
-          <h1 className="mt-2 text-3xl font-bold">Omset per Web</h1>
+          <h1 className="mt-2 text-2xl font-bold">Omset per Web</h1>
           <p className="mt-2 text-slate-600">
             Klik baris web untuk melihat nama CRM dan total performanya.
           </p>
@@ -60,7 +60,7 @@ export default function WebView({
         </button>
       </div>
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="overflow-x-auto rounded-2xl">
           <table className="w-full min-w-[1000px] text-sm">
             <thead>

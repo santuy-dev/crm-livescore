@@ -28,51 +28,51 @@ export default function CrmView({
   onAddCrm,
 }: Props) {
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="w-full space-y-4">
       <div>
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           Master Data
         </div>
-        <h1 className="mt-2 text-3xl font-bold">CRM Management</h1>
+        <h1 className="mt-2 text-2xl font-bold">CRM Management</h1>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm xl:sticky xl:top-6">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1100px] text-sm">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm xl:sticky xl:top-6">
+          <div className="overflow-x-auto rounded-2xl">
+            <table className="w-full min-w-[1000px] text-sm">
               <thead>
                 <tr className="border-b border-slate-200 text-left text-slate-500">
-                  <th className="p-3">Nama CRM</th>
-                  <th className="p-3">Type</th>
-                  <th className="p-3">Group</th>
-                  <th className="p-3">Web</th>
-                  <th className="p-3">Target FDP</th>
-                  <th className="p-3">Target Value</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3">Aksi</th>
+                  <th className="px-3 py-2.5">Nama CRM</th>
+                  <th className="px-3 py-2.5">Type</th>
+                  <th className="px-3 py-2.5">Group</th>
+                  <th className="px-3 py-2.5">Web</th>
+                  <th className="px-3 py-2.5">Target FDP</th>
+                  <th className="px-3 py-2.5">Target Value</th>
+                  <th className="px-3 py-2.5">Status</th>
+                  <th className="px-3 py-2.5">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {crms.map((crm) => (
                   <tr key={crm.id} className="border-b border-slate-100 last:border-0">
-                    <td className="p-3 font-semibold">{crm.name}</td>
-                    <td className="p-3">{crm.type}</td>
-                    <td className="p-3">{crm.group}</td>
-                    <td className="p-3">{crm.web}</td>
-                    <td className="p-3">{crm.targetFdp}</td>
-                    <td className="p-3">{formatCurrency(crm.targetValue)}</td>
-                    <td className="p-3">{crm.active ? "ACTIVE" : "ARCHIVED"}</td>
-                    <td className="p-3">
+                    <td className="px-3 py-2.5 font-semibold">{crm.name}</td>
+                    <td className="px-3 py-2.5">{crm.type}</td>
+                    <td className="px-3 py-2.5">{crm.group}</td>
+                    <td className="px-3 py-2.5">{crm.web}</td>
+                    <td className="px-3 py-2.5">{crm.targetFdp}</td>
+                    <td className="px-3 py-2.5">{formatCurrency(crm.targetValue)}</td>
+                    <td className="px-3 py-2.5">{crm.active ? "ACTIVE" : "ARCHIVED"}</td>
+                    <td className="px-3 py-2.5">
                       <div className="flex gap-2">
                         <button
                           onClick={() => onToggleType(crm.id)}
-                          className="rounded-xl border border-slate-300 px-3 py-2 text-xs"
+                          className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs"
                         >
                           Ubah Type
                         </button>
                         <button
                           onClick={() => onToggleActive(crm.id)}
-                          className="rounded-xl border border-slate-300 px-3 py-2 text-xs"
+                          className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs"
                         >
                           {crm.active ? "Archive" : "Aktifkan"}
                         </button>
@@ -93,10 +93,10 @@ export default function CrmView({
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">Tambah CRM</h2>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h2 className="text-lg font-semibold">Tambah CRM</h2>
 
-          <div className="mt-5 space-y-4">
+          <div className="mt-4 space-y-4">
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Nama CRM</label>
               <input
@@ -104,7 +104,7 @@ export default function CrmView({
                 onChange={(e) =>
                   setNewCrmForm((prev) => ({ ...prev, name: e.target.value }))
                 }
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2.5"
               />
             </div>
 
@@ -115,7 +115,7 @@ export default function CrmView({
                 onChange={(e) =>
                   setNewCrmForm((prev) => ({ ...prev, group: e.target.value }))
                 }
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2.5"
               />
             </div>
 
@@ -126,7 +126,7 @@ export default function CrmView({
                 onChange={(e) =>
                   setNewCrmForm((prev) => ({ ...prev, web: e.target.value }))
                 }
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2.5"
               />
             </div>
 
@@ -142,7 +142,7 @@ export default function CrmView({
                     targetValue: nextType === "TRAINING" ? 250_000_000 : 500_000_000,
                   }));
                 }}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2.5"
               >
                 <option value="TRAINING">TRAINING</option>
                 <option value="REGULAR">REGULAR</option>
@@ -161,7 +161,7 @@ export default function CrmView({
                     targetFdp: e.target.value === "" ? "" : Number(e.target.value),
                   }))
                 }
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2.5"
               />
             </div>
 
@@ -177,13 +177,13 @@ export default function CrmView({
                     targetValue: e.target.value === "" ? "" : Number(e.target.value),
                   }))
                 }
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+                className="w-full rounded-xl border border-slate-300 px-4 py-2.5"
               />
             </div>
 
             <button
               onClick={onAddCrm}
-              className="w-full rounded-2xl bg-slate-900 px-5 py-3 font-medium text-white"
+              className="w-full rounded-xl bg-slate-900 px-4 py-2.5 font-medium text-white"
             >
               Simpan CRM
             </button>

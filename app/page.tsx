@@ -975,7 +975,7 @@ function getLeaderValueStatus(progress: number) {
           setSidebarOpen={(open) => setSidebarOpen(open)}
         />
 
-        <main className="min-h-screen flex-1 overflow-x-hidden p-4 md:p-6 xl:p-8">
+        <main className="min-h-screen flex-1 overflow-x-hidden p-3 md:p-5 xl:p-6">
           {!sidebarOpen && (
             <div className="mb-4">
               <button
@@ -987,7 +987,7 @@ function getLeaderValueStatus(progress: number) {
             </div>
           )}
 
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+          <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <DateRangeFilter onApply={setDateRange} />
 

@@ -89,12 +89,12 @@ export default function TeamLeaderView({
   });
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       <div>
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           Rekap Team
         </div>
-        <h1 className="mt-2 text-3xl font-bold">Team Leader</h1>
+        <h1 className="mt-2 text-2xl font-bold">Team Leader</h1>
         <p className="mt-2 text-slate-600">
           Rekap performa per team berdasarkan leader dan anggota CRM.
         </p>
@@ -250,14 +250,14 @@ export default function TeamLeaderView({
         </div>
       )}
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid gap-4 xl:grid-cols-2">
         {teams.map((team) => (
           <div
             key={team.leader}
-            className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
+            className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
           >
             <div className="grid grid-cols-3 border-b border-slate-200">
-              <div className="col-span-1 border-r border-slate-200 bg-white p-6 text-center">
+              <div className="col-span-1 border-r border-slate-200 bg-white p-4 text-center">
                 <div className="text-lg font-semibold text-slate-900">
                   {new Date().toLocaleDateString("id-ID", {
                     weekday: "long",
