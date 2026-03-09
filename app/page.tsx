@@ -1127,7 +1127,7 @@ async function fetchUsers() {
             </div>
           )}
 
-          <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
+          <div className="sticky top-2 z-40 mb-4 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm backdrop-blur">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <DateRangeFilter value={dateRange} onApply={setDateRange} />
 

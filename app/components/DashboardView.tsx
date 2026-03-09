@@ -176,7 +176,7 @@ export default function DashboardView({
         <PodiumCard title="Top 3 Performer" row={topThree[2]} rank={3} />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-center justify-between">
             <div>
@@ -189,7 +189,7 @@ export default function DashboardView({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1100px] text-sm">
+            <table className="w-full min-w-[1020px] text-sm">
               <thead>
                 <tr className="border-b border-slate-200 text-left text-slate-500">
                   <th className="p-3 py-2.5">Rank</th>
@@ -277,12 +277,12 @@ export default function DashboardView({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <div className="text-sm font-semibold text-slate-900">
+                      <div className="text-[13px] font-semibold text-slate-900">
                         #{index + 1} — {row.name}
-                      </div>
-                      <div className="mt-1 text-xs text-slate-500">
+                        </div>
+                      <div className="mt-1 text-[11px] leading-4 text-slate-500">
                         {row.group} • {row.web} • {row.type}
-                      </div>
+                        </div>
                     </div>
                     <span
                       className={`rounded-xl border px-3 py-1 text-xs font-medium ${getStatusClasses(
@@ -298,22 +298,22 @@ export default function DashboardView({
                     <ProgressBar label="Progress Value" value={row.pValue} />
                   </div>
 
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="rounded-2xl bg-slate-50 p-3">
-                      <div className="text-xs text-slate-500">FDP</div>
-                      <div className="mt-1 font-semibold text-slate-900">
-                        {row.totalFdp}
-                      </div>
-                    </div>
-                    <div className="rounded-2xl bg-slate-50 p-3">
-                      <div className="text-xs text-slate-500">Value</div>
-                      <div className="mt-1 font-semibold text-slate-900">
-                        {formatCurrency(row.totalValue)}
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-2 gap-2">
+                  <div className="rounded-xl bg-slate-50 p-2.5">
+                    <div className="text-[11px] text-slate-500">FDP</div>
+                        <div className="mt-1 text-sm font-semibold text-slate-900">
+                  {row.totalFdp}
                   </div>
-                </div>
-              ))}
+                      </div>
+                        <div className="rounded-xl bg-slate-50 p-2.5 min-w-0">
+                          <div className="text-[11px] text-slate-500">Value</div>
+                              <div className="mt-1 text-sm font-semibold text-slate-900 break-words leading-5">
+                              {formatCurrency(row.totalValue)}
+                              </div>
+                              </div>
+                              </div>
+                                    </div>
+                                ))}
 
               {topFive.length === 0 && (
                 <div className="rounded-2xl bg-slate-50 p-6 text-center text-sm text-slate-500">
@@ -332,7 +332,7 @@ export default function DashboardView({
             </div>
 
             <div className="space-y-4 text-sm">
-              <div className="rounded-2xl bg-slate-50 p-4">
+              <div className="rounded-2xl bg-slate-50 p-3">
                 <div className="text-slate-500">CRM tertinggi berdasarkan value</div>
                 <div className="mt-1 font-semibold text-slate-900">
                   {topValue?.name ?? "-"}
