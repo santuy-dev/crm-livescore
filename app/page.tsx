@@ -11,6 +11,7 @@ import DailyChartView from "./components/DailyChartView";
 import InputView from "./components/InputView";
 import WebView from "./components/WebView";
 import GroupView from "./components/GroupView";
+import TeamLeaderView from "./components/TeamLeaderView";
 import BonusView from "./components/BonusView";
 import CrmView from "./components/CrmView";
 import UsersView from "./components/UsersView";
@@ -359,15 +360,39 @@ export default function Page() {
     return Array.from(map.values()).sort((a, b) => b.totalValue - a.totalValue);
   }, [filteredRows]);
 
+function getLeaderFdpStatus(progress: number) {
+  if (progress >= 1) return "EXCELLENT";
+  if (progress >= 0.6) return "BETTER";
+  return "ON GOING";
+}
+
+function getLeaderValueStatus(progress: number) {
+  if (progress >= 1) return "GOALS";
+  if (progress >= 0.6) return "MENUJU TARGET";
+  return "JAUH DARI TARGET";
+}
+
   const teamLeaderRows = useMemo(() => {
   const map = new Map<
     string,
     {
       leader: string;
-      crmCount: number;
-      members: string[];
+      members: {
+        id: string;
+        name: string;
+        web: string;
+        leader: string;
+        fdp: number;
+        value: number;
+        fdpStatus: string;
+        valueStatus: string;
+      }[];
       totalFdp: number;
       totalValue: number;
+      topFdpName: string;
+      topFdpValue: number;
+      topValueName: string;
+      topValueAmount: number;
     }
   >();
 
@@ -377,18 +402,41 @@ export default function Page() {
     if (!map.has(leaderName)) {
       map.set(leaderName, {
         leader: leaderName,
-        crmCount: 0,
         members: [],
         totalFdp: 0,
         totalValue: 0,
+        topFdpName: "",
+        topFdpValue: 0,
+        topValueName: "",
+        topValueAmount: 0,
       });
     }
 
     const current = map.get(leaderName)!;
-    current.crmCount += 1;
-    current.members.push(row.name);
+
+    current.members.push({
+      id: row.id,
+      name: row.name,
+      web: row.web,
+      leader: leaderName,
+      fdp: row.totalFdp,
+      value: row.totalValue,
+      fdpStatus: getLeaderFdpStatus(row.pFdp),
+      valueStatus: getLeaderValueStatus(row.pValue),
+    });
+
     current.totalFdp += row.totalFdp;
     current.totalValue += row.totalValue;
+
+    if (row.totalFdp > current.topFdpValue) {
+      current.topFdpValue = row.totalFdp;
+      current.topFdpName = `${row.name} (${row.web})`;
+    }
+
+    if (row.totalValue > current.topValueAmount) {
+      current.topValueAmount = row.totalValue;
+      current.topValueName = `${row.name} (${row.web})`;
+    }
   });
 
   return Array.from(map.values()).sort((a, b) => b.totalValue - a.totalValue);
