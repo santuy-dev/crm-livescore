@@ -42,6 +42,7 @@ type Props = {
   leaderForm: LeaderFormState;
   setLeaderForm: React.Dispatch<React.SetStateAction<LeaderFormState>>;
   onSaveLeader: () => void | Promise<void>;
+  onDeleteLeader: (leaderName: string) => void | Promise<void>;
 };
 
 function statusClass(status: string) {
@@ -62,7 +63,9 @@ export default function TeamLeaderView({
   leaderForm,
   setLeaderForm,
   onSaveLeader,
+  onDeleteLeader,
 }: Props) {
+
   function toggleCrm(crmId: string) {
     setLeaderForm((prev) => {
       const exists = prev.selectedCrmIds.includes(crmId);
@@ -255,6 +258,22 @@ export default function TeamLeaderView({
             key={team.leader}
             className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
           >
+            <div className="flex items-center justify-between border-b border-slate-200 bg-white px-3 py-2">
+  <div className="text-sm font-semibold text-slate-900">
+    Team {team.leader}
+  </div>
+
+  {team.leader !== "-" && (
+    <button
+      onClick={() => {
+        void onDeleteLeader(team.leader);
+      }}
+      className="rounded-lg border border-rose-300 px-3 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-50"
+    >
+      Hapus Team Leader
+    </button>
+  )}
+</div>
             <div className="grid shrink-0 grid-cols-3 border-b border-slate-200">
               <div className="border-r border-slate-200 p-3 text-center">
                 <div className="text-xs font-semibold text-slate-700">

@@ -826,6 +826,33 @@ function getLeaderValueStatus(progress: number) {
   alert("Type CRM berhasil diubah.");
 }
 
+async function handleDeleteLeader(leaderName: string) {
+  if (!leaderName || leaderName === "-") {
+    alert("Leader ini tidak bisa dihapus.");
+    return;
+  }
+
+  const confirmed = window.confirm(
+    `Hapus team leader ${leaderName}? Semua anggota akan dikosongkan dari team ini.`
+  );
+
+  if (!confirmed) return;
+
+  const { error } = await supabase
+    .from("crms")
+    .update({ leader: "-" })
+    .eq("leader", leaderName);
+
+  if (error) {
+    console.error("Delete leader error:", error);
+    alert("Gagal hapus team leader: " + error.message);
+    return;
+  }
+
+  await fetchCrms();
+  alert(`Team leader ${leaderName} berhasil dihapus.`);
+}
+
   async function toggleCrmActive(crmId: string) {
   const currentCrm = crms.find((crm) => crm.id === crmId);
 
@@ -1234,13 +1261,14 @@ async function fetchUsers() {
             <GroupView groupRows={groupRows} onExport={exportGroupCsv} />
           )}
 
-        {page === "teamleader" && (
+          {page === "teamleader" && (
   <TeamLeaderView
     teams={teamLeaderRows}
     crmOptions={teamLeaderCrmOptions}
     leaderForm={leaderForm}
     setLeaderForm={setLeaderForm}
     onSaveLeader={handleSaveLeader}
+    onDeleteLeader={handleDeleteLeader}
   />
 )}
 
