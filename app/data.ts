@@ -10,6 +10,7 @@ export type Crm = {
   targetFdp: number;
   targetValue: number;
   active: boolean;
+  leader: string;
 };
 
 export type InputRow = {
@@ -55,6 +56,7 @@ export const INITIAL_CRMS: Crm[] = [
     targetFdp: 100,
     targetValue: 500_000_000,
     active: true,
+    leader: "KARIN",
   },
   {
     id: "c2",
@@ -65,6 +67,7 @@ export const INITIAL_CRMS: Crm[] = [
     targetFdp: 100,
     targetValue: 500_000_000,
     active: true,
+    leader: "KARIN",
   },
   {
     id: "c3",
@@ -75,6 +78,7 @@ export const INITIAL_CRMS: Crm[] = [
     targetFdp: 100,
     targetValue: 250_000_000,
     active: true,
+    leader: "SONYA",
   },
 ];
 

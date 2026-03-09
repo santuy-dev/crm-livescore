@@ -138,15 +138,16 @@ export default function Page() {
     }
 
     const mapped: Crm[] = (data ?? []).map((item: any) => ({
-      id: item.id,
-      name: item.name,
-      group: item.group,
-      web: item.web,
-      type: item.type ?? "TRAINING",
-      targetFdp: item.target_fdp ?? item.targetFdp ?? 100,
-      targetValue: item.target_value ?? item.targetValue ?? 250000000,
-      active: item.active ?? true,
-    }));
+  id: item.id,
+  name: item.name,
+  group: item.group,
+  web: item.web,
+  type: item.type ?? "TRAINING",
+  targetFdp: item.target_fdp ?? item.targetFdp ?? 100,
+  targetValue: item.target_value ?? item.targetValue ?? 250000000,
+  active: item.active ?? true,
+  leader: item.leader ?? "-",
+}));
 
     setCrms(mapped);
 
@@ -357,6 +358,41 @@ export default function Page() {
 
     return Array.from(map.values()).sort((a, b) => b.totalValue - a.totalValue);
   }, [filteredRows]);
+
+  const teamLeaderRows = useMemo(() => {
+  const map = new Map<
+    string,
+    {
+      leader: string;
+      crmCount: number;
+      members: string[];
+      totalFdp: number;
+      totalValue: number;
+    }
+  >();
+
+  filteredRows.forEach((row) => {
+    const leaderName = row.leader || "-";
+
+    if (!map.has(leaderName)) {
+      map.set(leaderName, {
+        leader: leaderName,
+        crmCount: 0,
+        members: [],
+        totalFdp: 0,
+        totalValue: 0,
+      });
+    }
+
+    const current = map.get(leaderName)!;
+    current.crmCount += 1;
+    current.members.push(row.name);
+    current.totalFdp += row.totalFdp;
+    current.totalValue += row.totalValue;
+  });
+
+  return Array.from(map.values()).sort((a, b) => b.totalValue - a.totalValue);
+}, [filteredRows]);
 
   const groupRows = useMemo(() => {
     const map = new Map<
@@ -910,24 +946,63 @@ export default function Page() {
           )}
 
         {page === "teamleader" && (
-          <div className="w-full space-y-6">
-        <div>
+  <div className="w-full space-y-6">
+    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div>
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-        Rekap Omset
+          Rekap Team
         </div>
         <h1 className="mt-2 text-3xl font-bold">Team Leader</h1>
         <p className="mt-2 text-slate-600">
-          Halaman Team Leader masih dalam proses pembuatan.
-       </p>
-         </div>
+          Rekap performa berdasarkan pembagian leader dan anggota CRM.
+        </p>
+      </div>
+    </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="text-sm text-slate-500">
-            Nanti isi halaman Team Leader ditampilkan di sini.
-          </div>
-        </div>
-        </div>
-        )}
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="overflow-x-auto rounded-2xl">
+        <table className="w-full min-w-[1100px] text-sm">
+          <thead>
+            <tr className="border-b border-slate-200 text-left text-slate-500">
+              <th className="p-3">Rank</th>
+              <th className="p-3">Team Leader</th>
+              <th className="p-3">Jumlah CRM</th>
+              <th className="p-3">Anggota</th>
+              <th className="p-3">Total FDP</th>
+              <th className="p-3">Total Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teamLeaderRows.map((row, index) => (
+              <tr key={row.leader} className="border-b border-slate-100 last:border-0">
+                <td className="p-3 font-semibold">{index + 1}</td>
+                <td className="p-3 font-semibold">{row.leader}</td>
+                <td className="p-3">{row.crmCount}</td>
+                <td className="p-3">{row.members.join(", ")}</td>
+                <td className="p-3">{row.totalFdp}</td>
+                <td className="p-3">
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    maximumFractionDigits: 0,
+                  }).format(row.totalValue)}
+                </td>
+              </tr>
+            ))}
+
+            {teamLeaderRows.length === 0 && (
+              <tr>
+                <td colSpan={6} className="p-6 text-center text-slate-500">
+                  Belum ada data team leader.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+)}
 
           {page === "bonus" && canSeeRestricted && (
             <BonusView
