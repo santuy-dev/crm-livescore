@@ -1283,13 +1283,13 @@ async function fetchUsers() {
         />
       )}
 
-          {page === "bonus" && canSeeRestricted && (
-            <BonusView
-              bonusRows={bonusRows}
-              totalBonus={totalBonus}
-              onExport={exportBonusCsv}
-            />
-          )}
+          {page === "bonus" && (
+  <BonusView
+    bonusRows={bonusRows}
+    totalBonus={totalBonus}
+    onExport={exportBonusCsv}
+  />
+)}
 
           {page === "input" && canSeeRestricted && (
             <InputView

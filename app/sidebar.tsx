@@ -32,7 +32,7 @@ export default function Sidebar({
     { key: "web", label: "Omset per Web", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "group", label: "Omset per Group", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "teamleader", label: "Team Leader", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
-    { key: "bonus", label: "Bonus CRM", roles: ["SUPERADMIN", "ADMIN"] },
+    { key: "bonus", label: "Bonus CRM", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "input", label: "Input Harian", roles: ["SUPERADMIN", "ADMIN"] },
     { key: "crm", label: "CRM Management", roles: ["SUPERADMIN"] },
     { key: "users", label: "User Management", roles: ["SUPERADMIN"] },
