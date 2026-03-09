@@ -94,6 +94,11 @@ export default function Page() {
   const [selectedGroupFilter, setSelectedGroupFilter] = useState("ALL");
   const [selectedWebFilter, setSelectedWebFilter] = useState("ALL");
 
+  const [leaderForm, setLeaderForm] = useState({
+  leaderName: "",
+  selectedCrmIds: [] as string[],
+});
+
   const [inputForm, setInputForm] = useState<InputFormState>({
     date: new Date().toISOString().slice(0, 10),
     crmId: "",
@@ -307,6 +312,18 @@ export default function Page() {
       return matchesSearch && matchesGroup && matchesWeb;
     });
   }, [crms, searchTerm, selectedGroupFilter, selectedWebFilter]);
+
+const teamLeaderCrmOptions = useMemo(() => {
+  return crms
+    .filter((crm) => crm.active)
+    .map((crm) => ({
+      id: crm.id,
+      name: crm.name,
+      web: crm.web,
+      leader: crm.leader || "-",
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}, [crms]);
 
   const filteredPeriodInputs = useMemo(() => {
     const allowedCrmIds = new Set(filteredRows.map((x) => x.id));
@@ -720,6 +737,39 @@ function getLeaderValueStatus(progress: number) {
     });
   }
 
+  async function handleSaveLeader() {
+  const leaderName = leaderForm.leaderName.trim();
+
+  if (!leaderName) {
+    alert("Nama leader wajib diisi.");
+    return;
+  }
+
+  if (leaderForm.selectedCrmIds.length === 0) {
+    alert("Pilih minimal 1 CRM.");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("crms")
+    .update({ leader: leaderName })
+    .in("id", leaderForm.selectedCrmIds);
+
+  if (error) {
+    console.error("Update leader error:", error);
+    alert("Gagal simpan leader: " + error.message);
+    return;
+  }
+
+  setLeaderForm({
+    leaderName: "",
+    selectedCrmIds: [],
+  });
+
+  await fetchCrms();
+  alert("Team leader berhasil disimpan.");
+}
+
   function toggleUser(userId: string) {
     setUsers((prev) =>
       prev.map((u) => (u.id === userId ? { ...u, active: !u.active } : u))
@@ -994,7 +1044,15 @@ function getLeaderValueStatus(progress: number) {
             <GroupView groupRows={groupRows} onExport={exportGroupCsv} />
           )}
 
-        {page === "teamleader" && <TeamLeaderView teams={teamLeaderRows} />}
+        {page === "teamleader" && (
+  <TeamLeaderView
+    teams={teamLeaderRows}
+    crmOptions={teamLeaderCrmOptions}
+    leaderForm={leaderForm}
+    setLeaderForm={setLeaderForm}
+    onSaveLeader={handleSaveLeader}
+  />
+)}
 
           {page === "bonus" && canSeeRestricted && (
             <BonusView
