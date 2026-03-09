@@ -74,6 +74,7 @@ type SessionUser = {
 export default function Page() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [page, setPage] = useState<PageKey>("dashboard");
+  const [openWebs, setOpenWebs] = useState<string[]>([]);
   const [sessionRole, setSessionRole] = useState<Role>("SUPERADMIN");
 
   const [crms, setCrms] = useState<Crm[]>([]);
@@ -378,6 +379,43 @@ const teamLeaderCrmOptions = useMemo(() => {
 
     return Array.from(map.values()).sort((a, b) => b.totalValue - a.totalValue);
   }, [filteredRows]);
+
+  const webMembersMap = useMemo(() => {
+  const map: Record<
+    string,
+    {
+      id: string;
+      name: string;
+      group: string;
+      web: string;
+      totalFdp: number;
+      totalValue: number;
+      type: "TRAINING" | "REGULAR";
+    }[]
+  > = {};
+
+  filteredRows.forEach((row) => {
+    if (!map[row.web]) {
+      map[row.web] = [];
+    }
+
+    map[row.web].push({
+      id: row.id,
+      name: row.name,
+      group: row.group,
+      web: row.web,
+      totalFdp: row.totalFdp,
+      totalValue: row.totalValue,
+      type: row.type,
+    });
+  });
+
+  Object.keys(map).forEach((web) => {
+    map[web].sort((a, b) => b.totalValue - a.totalValue);
+  });
+
+  return map;
+}, [filteredRows]);
 
 function getLeaderFdpStatus(progress: number) {
   if (progress >= 1) return "EXCELLENT";
@@ -1042,7 +1080,15 @@ function getLeaderValueStatus(progress: number) {
             </div>
           )}
 
-          {page === "web" && <WebView webRows={webRows} onExport={exportWebCsv} />}
+          {page === "web" && (
+  <WebView
+    webRows={webRows}
+    webMembersMap={webMembersMap}
+    openWebs={openWebs}
+    setOpenWebs={setOpenWebs}
+    onExport={exportWebCsv}
+  />
+)}
 
           {page === "group" && (
             <GroupView groupRows={groupRows} onExport={exportGroupCsv} />
