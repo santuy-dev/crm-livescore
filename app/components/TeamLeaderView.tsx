@@ -89,7 +89,7 @@ export default function TeamLeaderView({
   });
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-2">
       <div>
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           Rekap Team
@@ -141,7 +141,7 @@ export default function TeamLeaderView({
               </button>
             </div>
 
-            <div className="mt-6 space-y-4">
+            <div className="mt-6 space-y-2">
               <div>
                 <label className="mb-2 block text-sm font-medium text-slate-700">
                   Nama Leader
@@ -181,7 +181,7 @@ export default function TeamLeaderView({
                   Pilih Anggota CRM
                 </div>
 
-                <div className="max-h-[320px] space-y-2 overflow-auto rounded-2xl border border-slate-200 p-3">
+                <div className="max-h-[300px] space-y-1 overflow-auto rounded-2xl border border-slate-200 p-3">
                   {filteredCrmOptions.map((crm) => {
                     const checked = leaderForm.selectedCrmIds.includes(crm.id);
 
