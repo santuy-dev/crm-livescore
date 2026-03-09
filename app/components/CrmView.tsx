@@ -36,8 +36,8 @@ export default function CrmView({
         <h1 className="mt-2 text-3xl font-bold">CRM Management</h1>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm xl:sticky xl:top-6">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1100px] text-sm">
               <thead>

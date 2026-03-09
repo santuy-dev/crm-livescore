@@ -41,7 +41,7 @@ export default function Sidebar({
   if (!sidebarOpen) return null;
 
   return (
-    <aside className="sticky top-0 h-screen w-72 border-r border-slate-200 bg-white">
+    <aside className="sticky top-0 h-screen w-64 shrink-0 border-r border-slate-200 bg-white">
       <div className="border-b border-slate-200 p-6">
         <div className="flex items-start justify-between gap-3">
           <div>

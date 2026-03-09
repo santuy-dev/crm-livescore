@@ -134,7 +134,7 @@ export default function DashboardView({
   const topFive = rows.slice(0, 5);
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="w-full space-y-6">
       <div>
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           Livescore Report
@@ -176,7 +176,7 @@ export default function DashboardView({
         <PodiumCard title="Top 3 Performer" row={topThree[2]} rank={3} />
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5 flex items-center justify-between">
             <div>

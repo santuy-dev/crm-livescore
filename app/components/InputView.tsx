@@ -34,7 +34,7 @@ export default function InputView({
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[430px_1fr]">
+      <div className="grid gap-6 xl:grid-cols-[460px_minmax(0,1fr)]">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-semibold">Form Input</h2>
 
@@ -118,7 +118,7 @@ export default function InputView({
                onClick={() => {
                  void onSave();
               }}
-  className="rounded-2xl bg-slate-900 px-4 py-3 text-white"
+  className="w-full rounded-2xl bg-slate-900 px-4 py-3 font-medium text-white"
 >
   Simpan Input
 </button>
