@@ -105,7 +105,7 @@ export default function TeamLeaderView({
         </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
+      <div className="space-y-6">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm xl:sticky xl:top-6">
   <div className="flex items-start justify-between gap-3">
     <div>
@@ -225,6 +225,136 @@ export default function TeamLeaderView({
           )}
 
           <div className="grid gap-6 xl:grid-cols-2">
+
+          {leaderForm.isOpen && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+    <div className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 shadow-xl">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Tambah / Atur Team Leader
+          </h2>
+          <p className="mt-2 text-sm text-slate-500">
+            Isi nama leader, lalu pilih anggota CRM yang ingin dimasukkan ke team.
+          </p>
+        </div>
+
+        <button
+          onClick={() =>
+            setLeaderForm((prev) => ({
+              ...prev,
+              isOpen: false,
+            }))
+          }
+          className="rounded-xl border border-slate-300 px-3 py-2 text-sm"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="mt-6 space-y-4">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-slate-700">
+            Nama Leader
+          </label>
+          <input
+            value={leaderForm.leaderName}
+            onChange={(e) =>
+              setLeaderForm((prev) => ({
+                ...prev,
+                leaderName: e.target.value,
+              }))
+            }
+            placeholder="Contoh: KARIN"
+            className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-slate-700">
+            Cari Nama CRM
+          </label>
+          <input
+            value={leaderForm.searchTerm}
+            onChange={(e) =>
+              setLeaderForm((prev) => ({
+                ...prev,
+                searchTerm: e.target.value,
+              }))
+            }
+            placeholder="Cari nama CRM / web / leader"
+            className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+          />
+        </div>
+
+        <div>
+          <div className="mb-2 text-sm font-medium text-slate-700">
+            Pilih Anggota CRM
+          </div>
+
+          <div className="max-h-[320px] space-y-2 overflow-auto rounded-2xl border border-slate-200 p-3">
+            {filteredCrmOptions.map((crm) => {
+              const checked = leaderForm.selectedCrmIds.includes(crm.id);
+
+              return (
+                <label
+                  key={crm.id}
+                  className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 hover:bg-slate-50"
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => toggleCrm(crm.id)}
+                    className="mt-1"
+                  />
+
+                  <div className="min-w-0">
+                    <div className="font-medium text-slate-900">
+                      {crm.name} ({crm.web})
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      Leader saat ini: {crm.leader || "-"}
+                    </div>
+                  </div>
+                </label>
+              );
+            })}
+
+            {filteredCrmOptions.length === 0 && (
+              <div className="text-sm text-slate-500">
+                Tidak ada CRM yang cocok dengan pencarian.
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() =>
+              setLeaderForm((prev) => ({
+                ...prev,
+                isOpen: false,
+              }))
+            }
+            className="rounded-2xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700"
+          >
+            Batal
+          </button>
+
+          <button
+            onClick={() => {
+              void onSaveLeader();
+            }}
+            className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white"
+          >
+            Simpan Team Leader
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
             {teams.map((team) => (
               <div
                 key={team.leader}
@@ -348,3 +478,17 @@ export default function TeamLeaderView({
     </div>
   );
 }
+
+<div className="flex justify-start">
+  <button
+    onClick={() =>
+      setLeaderForm((prev) => ({
+        ...prev,
+        isOpen: true,
+      }))
+    }
+    className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white"
+  >
+    Tambah / Atur Team Leader
+  </button>
+</div>
