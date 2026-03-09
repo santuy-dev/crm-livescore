@@ -128,9 +128,14 @@ export default function TeamLeaderView({ teams }: Props) {
                       <td className="p-3 font-medium text-slate-900">
                         {member.name} ({member.web})
                       </td>
-                      <td className="bg-amber-300 p-3 text-center font-bold text-black">
+                      {index === 0 && (
+                      <td
+                        rowSpan={team.members.length}
+                        className="bg-amber-300 p-3 text-center align-middle font-bold text-black"
+                      >
                         {member.leader}
                       </td>
+                    )}
                       <td className="p-3">{member.fdp}</td>
                       <td className="p-3">{formatCurrency(member.value)}</td>
                       <td className="p-3">
