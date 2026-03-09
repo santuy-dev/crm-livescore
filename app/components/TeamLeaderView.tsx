@@ -39,6 +39,7 @@ type LeaderFormState = {
 type Props = {
   teams: TeamLeaderGroup[];
   crmOptions: CrmOption[];
+  unassignedMembers: TeamLeaderMember[];
   leaderForm: LeaderFormState;
   setLeaderForm: React.Dispatch<React.SetStateAction<LeaderFormState>>;
   onSaveLeader: () => void | Promise<void>;
@@ -59,6 +60,7 @@ function statusClass(status: string) {
 
 export default function TeamLeaderView({
   teams,
+  unassignedMembers,
   crmOptions,
   leaderForm,
   setLeaderForm,
@@ -262,6 +264,36 @@ export default function TeamLeaderView({
   <div className="text-sm font-semibold text-slate-900">
     Team {team.leader}
   </div>
+
+  <div className="grid h-[calc(100vh-180px)] grid-cols-1 gap-3 xl:grid-cols-2">
+  {teams.map((team) => (
+    <div key={team.leader}>
+      ...
+    </div>
+  ))}
+</div>
+
+{unassignedMembers.length > 0 && (
+  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+    <div className="text-sm font-semibold text-amber-800">
+      Belum Ada Team Leader
+    </div>
+    <div className="mt-2 text-sm text-amber-700">
+      CRM berikut belum di-assign ke team leader:
+    </div>
+
+    <div className="mt-3 flex flex-wrap gap-2">
+      {unassignedMembers.map((member) => (
+        <div
+          key={member.id}
+          className="rounded-full border border-amber-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700"
+        >
+          {member.name} ({member.web})
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
   {team.leader !== "-" && (
     <button

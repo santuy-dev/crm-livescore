@@ -482,6 +482,7 @@ function getLeaderValueStatus(progress: number) {
 
   const teamLeaderRows = useMemo(() => {
   const map = new Map<
+  
     string,
     {
       leader: string;
@@ -549,6 +550,15 @@ function getLeaderValueStatus(progress: number) {
 
   return Array.from(map.values()).sort((a, b) => b.totalValue - a.totalValue);
 }, [filteredRows]);
+
+const assignedTeamLeaderRows = useMemo(() => {
+  return teamLeaderRows.filter((team) => team.leader !== "-");
+}, [teamLeaderRows]);
+
+const unassignedLeaderMembers = useMemo(() => {
+  const unassigned = teamLeaderRows.find((team) => team.leader === "-");
+  return unassigned?.members ?? [];
+}, [teamLeaderRows]);
 
   const groupRows = useMemo(() => {
     const map = new Map<
@@ -1262,8 +1272,10 @@ async function fetchUsers() {
           )}
 
           {page === "teamleader" && (
+  {page === "teamleader" && (
   <TeamLeaderView
-    teams={teamLeaderRows}
+    teams={assignedTeamLeaderRows}
+    unassignedMembers={unassignedLeaderMembers}
     crmOptions={teamLeaderCrmOptions}
     leaderForm={leaderForm}
     setLeaderForm={setLeaderForm}
