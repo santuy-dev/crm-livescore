@@ -648,18 +648,19 @@ export default function Page() {
     }
 
     setCrms((prev) => [
-      ...prev,
-      {
-        id: makeId("crm"),
-        name: newCrmForm.name.trim(),
-        group: newCrmForm.group.trim(),
-        web: newCrmForm.web.trim(),
-        type: newCrmForm.type,
-        targetFdp: safeNumber(newCrmForm.targetFdp),
-        targetValue: safeNumber(newCrmForm.targetValue),
-        active: true,
-      },
-    ]);
+  ...prev,
+  {
+    id: makeId("crm"),
+    name: newCrmForm.name.trim(),
+    group: newCrmForm.group.trim(),
+    web: newCrmForm.web.trim(),
+    type: newCrmForm.type,
+    targetFdp: safeNumber(newCrmForm.targetFdp),
+    targetValue: safeNumber(newCrmForm.targetValue),
+    active: true,
+    leader: "-",
+  },
+]);
 
     setNewCrmForm({
       name: "",
