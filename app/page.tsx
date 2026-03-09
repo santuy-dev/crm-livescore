@@ -1272,17 +1272,16 @@ async function fetchUsers() {
           )}
 
           {page === "teamleader" && (
-  {page === "teamleader" && (
-  <TeamLeaderView
-    teams={assignedTeamLeaderRows}
-    unassignedMembers={unassignedLeaderMembers}
-    crmOptions={teamLeaderCrmOptions}
-    leaderForm={leaderForm}
-    setLeaderForm={setLeaderForm}
-    onSaveLeader={handleSaveLeader}
-    onDeleteLeader={handleDeleteLeader}
-  />
-)}
+            <TeamLeaderView
+          teams={assignedTeamLeaderRows}
+          unassignedMembers={unassignedLeaderMembers}
+          crmOptions={teamLeaderCrmOptions}
+          leaderForm={leaderForm}
+          setLeaderForm={setLeaderForm}
+          onSaveLeader={handleSaveLeader}
+          onDeleteLeader={handleDeleteLeader}
+        />
+      )}
 
           {page === "bonus" && canSeeRestricted && (
             <BonusView
