@@ -947,16 +947,14 @@ export default function Page() {
 
         {page === "teamleader" && (
   <div className="w-full space-y-6">
-    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-      <div>
-        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-          Rekap Team
-        </div>
-        <h1 className="mt-2 text-3xl font-bold">Team Leader</h1>
-        <p className="mt-2 text-slate-600">
-          Rekap performa berdasarkan pembagian leader dan anggota CRM.
-        </p>
+    <div>
+      <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+        Rekap Team
       </div>
+      <h1 className="mt-2 text-3xl font-bold">Team Leader</h1>
+      <p className="mt-2 text-slate-600">
+        Rekap performa berdasarkan pembagian team leader dan anggota CRM.
+      </p>
     </div>
 
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
