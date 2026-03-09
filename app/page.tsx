@@ -97,6 +97,8 @@ export default function Page() {
   const [leaderForm, setLeaderForm] = useState({
   leaderName: "",
   selectedCrmIds: [] as string[],
+  searchTerm: "",
+  isOpen: false,
 });
 
   const [inputForm, setInputForm] = useState<InputFormState>({
@@ -762,9 +764,11 @@ function getLeaderValueStatus(progress: number) {
   }
 
   setLeaderForm({
-    leaderName: "",
-    selectedCrmIds: [],
-  });
+  leaderName: "",
+  selectedCrmIds: [],
+  searchTerm: "",
+  isOpen: false,
+});
 
   await fetchCrms();
   alert("Team leader berhasil disimpan.");

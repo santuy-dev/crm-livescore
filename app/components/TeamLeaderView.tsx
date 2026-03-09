@@ -35,11 +35,15 @@ type Props = {
   leaderForm: {
     leaderName: string;
     selectedCrmIds: string[];
+    searchTerm: string;
+    isOpen: boolean;
   };
   setLeaderForm: React.Dispatch<
     React.SetStateAction<{
       leaderName: string;
       selectedCrmIds: string[];
+      searchTerm: string;
+      isOpen: boolean;
     }>
   >;
   onSaveLeader: () => void | Promise<void>;
@@ -77,6 +81,18 @@ export default function TeamLeaderView({
     });
   }
 
+  const filteredCrmOptions = crmOptions.filter((crm) => {
+  const keyword = leaderForm.searchTerm.trim().toLowerCase();
+
+  if (!keyword) return true;
+
+  return (
+    crm.name.toLowerCase().includes(keyword) ||
+    crm.web.toLowerCase().includes(keyword) ||
+    (crm.leader || "").toLowerCase().includes(keyword)
+  );
+});
+
   return (
     <div className="w-full space-y-6">
       <div>
@@ -91,78 +107,115 @@ export default function TeamLeaderView({
 
       <div className="grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm xl:sticky xl:top-6">
-          <h2 className="text-xl font-semibold">Tambah / Atur Team Leader</h2>
-          <p className="mt-2 text-sm text-slate-500">
-            Isi nama leader, lalu pilih anggota CRM yang ingin dimasukkan ke team itu.
-          </p>
+  <div className="flex items-start justify-between gap-3">
+    <div>
+      <h2 className="text-xl font-semibold">Tambah / Atur Team Leader</h2>
+      <p className="mt-2 text-sm text-slate-500">
+        Isi nama leader, lalu pilih anggota CRM yang ingin dimasukkan ke team itu.
+      </p>
+    </div>
 
-          <div className="mt-5 space-y-4">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
-                Nama Leader
-              </label>
-              <input
-                value={leaderForm.leaderName}
-                onChange={(e) =>
-                  setLeaderForm((prev) => ({
-                    ...prev,
-                    leaderName: e.target.value,
-                  }))
-                }
-                placeholder="Contoh: KARIN"
-                className="w-full rounded-2xl border border-slate-300 px-4 py-3"
-              />
-            </div>
+    <button
+      onClick={() =>
+        setLeaderForm((prev) => ({
+          ...prev,
+          isOpen: !prev.isOpen,
+        }))
+      }
+      className="rounded-xl border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
+    >
+      {leaderForm.isOpen ? "Arsipkan" : "Buka Form"}
+    </button>
+  </div>
 
-            <div>
-              <div className="mb-2 text-sm font-medium text-slate-700">
-                Pilih Anggota CRM
-              </div>
+  {leaderForm.isOpen && (
+    <div className="mt-5 space-y-4">
+      <div>
+        <label className="mb-2 block text-sm font-medium text-slate-700">
+          Nama Leader
+        </label>
+        <input
+          value={leaderForm.leaderName}
+          onChange={(e) =>
+            setLeaderForm((prev) => ({
+              ...prev,
+              leaderName: e.target.value,
+            }))
+          }
+          placeholder="Contoh: KARIN"
+          className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+        />
+      </div>
 
-              <div className="max-h-[320px] space-y-2 overflow-auto rounded-2xl border border-slate-200 p-3">
-                {crmOptions.map((crm) => {
-                  const checked = leaderForm.selectedCrmIds.includes(crm.id);
+      <div>
+        <label className="mb-2 block text-sm font-medium text-slate-700">
+          Cari Nama CRM
+        </label>
+        <input
+          value={leaderForm.searchTerm}
+          onChange={(e) =>
+            setLeaderForm((prev) => ({
+              ...prev,
+              searchTerm: e.target.value,
+            }))
+          }
+          placeholder="Cari nama CRM / web / leader"
+          className="w-full rounded-2xl border border-slate-300 px-4 py-3"
+        />
+      </div>
 
-                  return (
-                    <label
-                      key={crm.id}
-                      className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 hover:bg-slate-50"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleCrm(crm.id)}
-                        className="mt-1"
-                      />
-
-                      <div className="min-w-0">
-                        <div className="font-medium text-slate-900">
-                          {crm.name} ({crm.web})
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          Leader saat ini: {crm.leader || "-"}
-                        </div>
-                      </div>
-                    </label>
-                  );
-                })}
-
-                {crmOptions.length === 0 && (
-                  <div className="text-sm text-slate-500">Belum ada data CRM.</div>
-                )}
-              </div>
-            </div>
-
-            <button
-              onClick={() => {
-                void onSaveLeader();
-              }}
-              className="w-full rounded-2xl bg-slate-900 px-4 py-3 font-medium text-white"
-            >
-              Simpan Team Leader
-            </button>
-          </div>
+      <div>
+        <div className="mb-2 text-sm font-medium text-slate-700">
+          Pilih Anggota CRM
         </div>
+
+        <div className="max-h-[320px] space-y-2 overflow-auto rounded-2xl border border-slate-200 p-3">
+          {filteredCrmOptions.map((crm) => {
+            const checked = leaderForm.selectedCrmIds.includes(crm.id);
+
+            return (
+              <label
+                key={crm.id}
+                className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 hover:bg-slate-50"
+              >
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggleCrm(crm.id)}
+                  className="mt-1"
+                />
+
+                <div className="min-w-0">
+                  <div className="font-medium text-slate-900">
+                    {crm.name} ({crm.web})
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    Leader saat ini: {crm.leader || "-"}
+                  </div>
+                </div>
+              </label>
+            );
+          })}
+
+          {filteredCrmOptions.length === 0 && (
+            <div className="text-sm text-slate-500">
+              Tidak ada CRM yang cocok dengan pencarian.
+            </div>
+          )}
+        </div>
+      </div>
+
+      <button
+        onClick={() => {
+          void onSaveLeader();
+        }}
+        className="w-full rounded-2xl bg-slate-900 px-4 py-3 font-medium text-white"
+      >
+        Simpan Team Leader
+      </button>
+    </div>
+  )}
+</div>
 
         <div className="space-y-6">
           {teams.length === 0 && (
