@@ -4,11 +4,12 @@ type PageKey =
   | "dashboard"
   | "web"
   | "group"
+  | "teamleader"
   | "bonus"
   | "input"
   | "crm"
   | "users";
-
+  
 type Role = "SUPERADMIN" | "ADMIN" | "VIEWER";
 
 type Props = {
@@ -30,6 +31,7 @@ export default function Sidebar({
     { key: "dashboard", label: "Dashboard", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "web", label: "Omset per Web", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "group", label: "Omset per Group", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
+    { key: "teamleader", label: "Team Leader", roles: ["SUPERADMIN", "ADMIN", "VIEWER"] },
     { key: "bonus", label: "Bonus CRM", roles: ["SUPERADMIN", "ADMIN"] },
     { key: "input", label: "Input Harian", roles: ["SUPERADMIN", "ADMIN"] },
     { key: "crm", label: "CRM Management", roles: ["SUPERADMIN"] },
