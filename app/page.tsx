@@ -191,26 +191,19 @@ export default function Page() {
   }
 
   useEffect(() => {
-    const loadedUsers = loadLocal("crm_users", INITIAL_USERS);
-    const loadedSession = loadLocal<SessionUser | null>("crm_session", null);
+  const loadedSession = loadLocal<SessionUser | null>("crm_session", null);
 
-    setUsers(loadedUsers);
+  if (loadedSession) {
+    setSessionUser(loadedSession);
+    setSessionRole(loadedSession.role);
+  }
 
-    if (loadedSession) {
-      setSessionUser(loadedSession);
-      setSessionRole(loadedSession.role);
-    }
+  setIsHydrated(true);
 
-    setIsHydrated(true);
-
-    void fetchCrms();
-    void fetchInputs();
-  }, []);
-
-  useEffect(() => {
-    if (!isHydrated) return;
-    saveLocal("crm_users", users);
-  }, [users, isHydrated]);
+  void fetchCrms();
+  void fetchInputs();
+  void fetchUsers();
+}, []);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -588,7 +581,7 @@ function getLeaderValueStatus(progress: number) {
     });
   }
 
-  function handleChangePassword() {
+  async function handleChangePassword() {
   if (!sessionUser) return;
 
   const currentUser = users.find((u) => u.username === sessionUser.username);
@@ -610,6 +603,19 @@ function getLeaderValueStatus(progress: number) {
 
   if (passwordForm.newPassword !== passwordForm.confirmPassword) {
     alert("Konfirmasi password tidak sama.");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("users")
+    .update({
+      password: passwordForm.newPassword,
+    })
+    .eq("username", sessionUser.username);
+
+  if (error) {
+    console.error("Change password error:", error);
+    alert("Gagal update password: " + error.message);
     return;
   }
 
@@ -911,6 +917,29 @@ function getLeaderValueStatus(progress: number) {
       role: "VIEWER",
     });
   }
+
+async function fetchUsers() {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Error ambil users:", error);
+    return;
+  }
+
+  const mapped: User[] = (data ?? []).map((item: any) => ({
+    id: item.id,
+    username: item.username,
+    name: item.name,
+    password: item.password,
+    role: item.role,
+    active: item.active ?? true,
+  }));
+
+  setUsers(mapped);
+}
 
   function exportWebCsv() {
     exportCsv(`omset-web-${selectedPeriod}.csv`, [
