@@ -48,13 +48,13 @@ export default function Sidebar({
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-              Internal App
+              TSA GROUP
             </div>
             <h1 className="mt-2 text-xl font-bold text-slate-900">
               CRM Livescore
             </h1>
             <p className="mt-2 text-xs leading-5 text-slate-500">
-              Dashboard operasional CRM, omset, target, bonus, dan input harian.
+              Dashboard operasional CRM
             </p>
           </div>
 
@@ -99,7 +99,7 @@ export default function Sidebar({
           crmleaderboard.site
         </div>
         <div className="mt-1 text-xs text-slate-500">
-          Prototype website dari workflow Google Sheet
+           WEB inspirasi dari workflow Google Sheet
         </div>
       </div>
     </aside>
