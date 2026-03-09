@@ -945,7 +945,7 @@ export default function Page() {
             <GroupView groupRows={groupRows} onExport={exportGroupCsv} />
           )}
 
-        {page === "teamleader" && (
+          {page === "teamleader" && (
   <div className="w-full space-y-6">
     <div>
       <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
