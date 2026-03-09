@@ -71,6 +71,14 @@ type SessionUser = {
   role: Role;
 };
 
+const STORAGE_KEYS = {
+  page: "crm_page",
+  dateRange: "crm_date_range",
+  searchTerm: "crm_search_term",
+  groupFilter: "crm_group_filter",
+  webFilter: "crm_web_filter",
+};
+
 export default function Page() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [page, setPage] = useState<PageKey>("dashboard");
@@ -198,6 +206,28 @@ export default function Page() {
     setSessionRole(loadedSession.role);
   }
 
+  const savedPage = loadLocal<PageKey>(STORAGE_KEYS.page, "dashboard");
+const savedDateRange = loadLocal<{
+  startDate: string;
+  endDate: string;
+} | null>(STORAGE_KEYS.dateRange, null);
+const savedSearchTerm = loadLocal<string>(STORAGE_KEYS.searchTerm, "");
+const savedGroupFilter = loadLocal<string>(STORAGE_KEYS.groupFilter, "ALL");
+const savedWebFilter = loadLocal<string>(STORAGE_KEYS.webFilter, "ALL");
+
+setPage(savedPage);
+setSearchTerm(savedSearchTerm);
+setSelectedGroupFilter(savedGroupFilter);
+setSelectedWebFilter(savedWebFilter);
+
+if (savedDateRange?.startDate && savedDateRange?.endDate) {
+  setDateRange({
+    startDate: new Date(savedDateRange.startDate),
+    endDate: new Date(savedDateRange.endDate),
+  });
+}
+
+  
   setIsHydrated(true);
 
   void fetchCrms();
@@ -209,6 +239,34 @@ export default function Page() {
     if (!isHydrated) return;
     saveLocal("crm_session", sessionUser);
   }, [sessionUser, isHydrated]);
+
+  useEffect(() => {
+  if (!isHydrated) return;
+  saveLocal(STORAGE_KEYS.page, page);
+}, [page, isHydrated]);
+
+useEffect(() => {
+  if (!isHydrated) return;
+  saveLocal(STORAGE_KEYS.searchTerm, searchTerm);
+}, [searchTerm, isHydrated]);
+
+useEffect(() => {
+  if (!isHydrated) return;
+  saveLocal(STORAGE_KEYS.groupFilter, selectedGroupFilter);
+}, [selectedGroupFilter, isHydrated]);
+
+useEffect(() => {
+  if (!isHydrated) return;
+  saveLocal(STORAGE_KEYS.webFilter, selectedWebFilter);
+}, [selectedWebFilter, isHydrated]);
+
+useEffect(() => {
+  if (!isHydrated) return;
+  saveLocal(STORAGE_KEYS.dateRange, {
+    startDate: dateRange.startDate.toISOString(),
+    endDate: dateRange.endDate.toISOString(),
+  });
+}, [dateRange, isHydrated]);
 
   const periodInputs = useMemo(() => {
     return inputs.filter((x) => {
@@ -971,10 +1029,14 @@ async function fetchUsers() {
   }
 
   function resetFilters() {
-    setSearchTerm("");
-    setSelectedGroupFilter("ALL");
-    setSelectedWebFilter("ALL");
-  }
+  setSearchTerm("");
+  setSelectedGroupFilter("ALL");
+  setSelectedWebFilter("ALL");
+  setDateRange({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
+}
 
   const canSeeRestricted = sessionRole === "SUPERADMIN" || sessionRole === "ADMIN";
 
@@ -1067,7 +1129,7 @@ async function fetchUsers() {
 
           <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <DateRangeFilter onApply={setDateRange} />
+              <DateRangeFilter value={dateRange} onApply={setDateRange} />
 
               <div className="flex flex-wrap items-center gap-3">
                 <input

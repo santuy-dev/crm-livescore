@@ -16,6 +16,7 @@ import {
 } from "date-fns";
 
 type Props = {
+  value: { startDate: Date; endDate: Date };
   onApply: (range: { startDate: Date; endDate: Date }) => void;
 };
 
@@ -25,13 +26,13 @@ type RangeItem = {
   key: string;
 };
 
-export default function DateRangeFilter({ onApply }: Props) {
+export default function DateRangeFilter({ value, onApply }: Props) {
   const [open, setOpen] = useState(false);
 
   const [ranges, setRanges] = useState<RangeItem[]>([
     {
-      startDate: subDays(new Date(), 29),
-      endDate: new Date(),
+      startDate: value.startDate,
+      endDate: value.endDate,
       key: "selection",
     },
   ]);
@@ -39,16 +40,25 @@ export default function DateRangeFilter({ onApply }: Props) {
   const currentRange = ranges[0];
 
   const buttonLabel = useMemo(() => {
-    return `${format(currentRange.startDate, "M/d/yyyy")} - ${format(
-      currentRange.endDate,
+    return `${format(value.startDate, "M/d/yyyy")} - ${format(
+      value.endDate,
       "M/d/yyyy"
     )}`;
-  }, [currentRange]);
+  }, [value]);
 
   return (
     <div className="relative">
       <button
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => {
+          setRanges([
+            {
+              startDate: value.startDate,
+              endDate: value.endDate,
+              key: "selection",
+            },
+          ]);
+          setOpen((prev) => !prev);
+        }}
         className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm"
       >
         {buttonLabel}
@@ -178,18 +188,18 @@ export default function DateRangeFilter({ onApply }: Props) {
             </button>
 
             <button
-  onClick={() => {
-    onApply({
-      startDate: currentRange.startDate,
-      endDate: currentRange.endDate,
-    });
-    setOpen(false);
-  }}
-  className="w-full rounded-lg border border-emerald-700 px-3 py-2 text-sm font-semibold"
-  style={{ backgroundColor: "#16a34a", color: "#ffffff" }}
->
-  Apply
-</button>
+              onClick={() => {
+                onApply({
+                  startDate: currentRange.startDate,
+                  endDate: currentRange.endDate,
+                });
+                setOpen(false);
+              }}
+              className="w-full rounded-lg border border-emerald-700 px-3 py-2 text-sm font-semibold"
+              style={{ backgroundColor: "#16a34a", color: "#ffffff" }}
+            >
+              Apply
+            </button>
           </div>
         </div>
       )}
