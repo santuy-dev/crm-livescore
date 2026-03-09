@@ -632,74 +632,81 @@ function getLeaderValueStatus(progress: number) {
 }
 
   async function saveInput() {
-    if (!inputForm.crmId) {
-      alert("CRM harus dipilih.");
-      return;
-    }
-
-    const cleanFdp = safeNumber(inputForm.fdp);
-    const cleanValue = safeNumber(inputForm.value);
-
-    if (cleanFdp <= 0 && cleanValue <= 0) {
-      alert("Minimal isi FDP atau Value.");
-      return;
-    }
-
-    const { data: existingRow, error: checkError } = await supabase
-      .from("inputs")
-      .select("id")
-      .eq("crm_id", inputForm.crmId)
-      .eq("date", inputForm.date)
-      .maybeSingle();
-
-    if (checkError) {
-      console.error("Supabase check error:", checkError);
-      alert("Gagal cek data lama: " + checkError.message);
-      return;
-    }
-
-    let saveError: any = null;
-
-    if (existingRow) {
-      const { error } = await supabase
-        .from("inputs")
-        .update({
-          fdp: cleanFdp,
-          value: cleanValue,
-        })
-        .eq("id", existingRow.id);
-
-      saveError = error;
-    } else {
-      const { error } = await supabase.from("inputs").insert([
-        {
-          date: inputForm.date,
-          crm_id: inputForm.crmId,
-          fdp: cleanFdp,
-          value: cleanValue,
-        },
-      ]);
-
-      saveError = error;
-    }
-
-    if (saveError) {
-      console.error("Supabase error:", saveError);
-      alert("Gagal simpan ke database: " + saveError.message);
-      return;
-    }
-
-    await fetchInputs();
-
-    setSelectedPeriod(monthKey(inputForm.date));
-    alert(existingRow ? "Data berhasil diupdate." : "Data berhasil disimpan.");
-
-    setInputForm((prev) => ({
-      ...prev,
-      fdp: "",
-      value: "",
-    }));
+  if (!inputForm.crmId) {
+    alert("CRM harus dipilih.");
+    return;
   }
+
+  const crmExists = crms.some((crm) => crm.id === inputForm.crmId);
+
+  if (!crmExists) {
+    alert("CRM yang dipilih tidak valid atau belum tersimpan di database.");
+    return;
+  }
+
+  const cleanFdp = safeNumber(inputForm.fdp);
+  const cleanValue = safeNumber(inputForm.value);
+
+  if (cleanFdp <= 0 && cleanValue <= 0) {
+    alert("Minimal isi FDP atau Value.");
+    return;
+  }
+
+  const { data: existingRow, error: checkError } = await supabase
+    .from("inputs")
+    .select("id")
+    .eq("crm_id", inputForm.crmId)
+    .eq("date", inputForm.date)
+    .maybeSingle();
+
+  if (checkError) {
+    console.error("Supabase check error:", checkError);
+    alert("Gagal cek data lama: " + checkError.message);
+    return;
+  }
+
+  let saveError: any = null;
+
+  if (existingRow) {
+    const { error } = await supabase
+      .from("inputs")
+      .update({
+        fdp: cleanFdp,
+        value: cleanValue,
+      })
+      .eq("id", existingRow.id);
+
+    saveError = error;
+  } else {
+    const { error } = await supabase.from("inputs").insert([
+      {
+        date: inputForm.date,
+        crm_id: inputForm.crmId,
+        fdp: cleanFdp,
+        value: cleanValue,
+      },
+    ]);
+
+    saveError = error;
+  }
+
+  if (saveError) {
+    console.error("Supabase error:", saveError);
+    alert("Gagal simpan ke database: " + saveError.message);
+    return;
+  }
+
+  await fetchInputs();
+
+  setSelectedPeriod(monthKey(inputForm.date));
+  alert(existingRow ? "Data berhasil diupdate." : "Data berhasil disimpan.");
+
+  setInputForm((prev) => ({
+    ...prev,
+    fdp: "",
+    value: "",
+  }));
+}
 
   function handleEditInput(row: InputRow) {
     setInputForm({
@@ -726,56 +733,98 @@ function getLeaderValueStatus(progress: number) {
     await fetchInputs();
   }
 
-  function toggleCrmType(crmId: string) {
-    setCrms((prev) =>
-      prev.map((crm) =>
-        crm.id === crmId
-          ? {
-              ...crm,
-              type: crm.type === "TRAINING" ? "REGULAR" : "TRAINING",
-              targetValue: crm.type === "TRAINING" ? 500000000 : 250000000,
-            }
-          : crm
-      )
-    );
+  async function toggleCrmType(crmId: string) {
+  const currentCrm = crms.find((crm) => crm.id === crmId);
+
+  if (!currentCrm) {
+    alert("CRM tidak ditemukan.");
+    return;
   }
 
-  function toggleCrmActive(crmId: string) {
-    setCrms((prev) =>
-      prev.map((crm) => (crm.id === crmId ? { ...crm, active: !crm.active } : crm))
-    );
+  const nextType = currentCrm.type === "TRAINING" ? "REGULAR" : "TRAINING";
+  const nextTargetValue = nextType === "TRAINING" ? 250000000 : 500000000;
+
+  const { error } = await supabase
+    .from("crms")
+    .update({
+      type: nextType,
+      target_value: nextTargetValue,
+    })
+    .eq("id", crmId);
+
+  if (error) {
+    console.error("Toggle CRM type error:", error);
+    alert("Gagal ubah type CRM: " + error.message);
+    return;
   }
 
-  function addCrm() {
-    if (!newCrmForm.name.trim() || !newCrmForm.group.trim() || !newCrmForm.web.trim()) {
-      alert("Lengkapi nama CRM, group, dan web.");
-      return;
-    }
+  await fetchCrms();
+  alert("Type CRM berhasil diubah.");
+}
 
-    setCrms((prev) => [
-  ...prev,
-  {
-    id: makeId("crm"),
+  async function toggleCrmActive(crmId: string) {
+  const currentCrm = crms.find((crm) => crm.id === crmId);
+
+  if (!currentCrm) {
+    alert("CRM tidak ditemukan.");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("crms")
+    .update({
+      active: !currentCrm.active,
+    })
+    .eq("id", crmId);
+
+  if (error) {
+    console.error("Toggle CRM active error:", error);
+    alert("Gagal ubah status CRM: " + error.message);
+    return;
+  }
+
+  await fetchCrms();
+  alert(currentCrm.active ? "CRM berhasil di-archive." : "CRM berhasil diaktifkan.");
+}
+
+  async function addCrm() {
+  if (!newCrmForm.name.trim() || !newCrmForm.group.trim() || !newCrmForm.web.trim()) {
+    alert("Lengkapi nama CRM, group, dan web.");
+    return;
+  }
+
+  const payload = {
     name: newCrmForm.name.trim(),
     group: newCrmForm.group.trim(),
     web: newCrmForm.web.trim(),
     type: newCrmForm.type,
-    targetFdp: safeNumber(newCrmForm.targetFdp),
-    targetValue: safeNumber(newCrmForm.targetValue),
+    target_fdp: safeNumber(newCrmForm.targetFdp),
+    target_value: safeNumber(newCrmForm.targetValue),
     active: true,
     leader: "-",
-  },
-]);
+  };
 
-    setNewCrmForm({
-      name: "",
-      group: "",
-      web: "",
-      type: "TRAINING",
-      targetFdp: 100,
-      targetValue: 250000000,
-    });
+  const { error } = await supabase.from("crms").insert([payload]);
+
+  if (error) {
+    console.error("Add CRM error:", error);
+    alert("Gagal simpan CRM: " + error.message);
+    return;
   }
+
+  await fetchCrms();
+
+  setNewCrmForm({
+    name: "",
+    group: "",
+    web: "",
+    type: "TRAINING",
+    targetFdp: 100,
+    targetValue: 250000000,
+  });
+
+  alert("CRM berhasil ditambahkan.");
+}
 
   async function handleSaveLeader() {
   const leaderName = leaderForm.leaderName.trim();
